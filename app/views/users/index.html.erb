@@ -1,0 +1,99 @@
+<p>Welcome, <%= @user.first_name %>!</p>
+<a href="/shoes">See All Products</a>
+
+<h1>Sell a product</h1>
+<form action = "/items" method = "post">
+	<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+	Name:
+	<input type='text' name=item[product]>
+	<br><br>
+	Amount: $
+	<input type="number" name=item[price]>
+	<br><br>
+	<input type = 'submit' value = 'List Item'>
+</form>
+<br>
+<div class="boxy">
+<h3>Your products that are not sold yet</h3>
+<table>
+	<thead>
+		<tr>
+			<th>Product</th>
+			<th>Date Posted</th>
+			<th>Amount</th>
+			<th>Action</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @available.each do |x| %>
+		<tr>
+			<td><%= x.product %></td>
+			<td><%= x.created_at.strftime("%b %d, %Y, %l: %M %p") %></td>
+			<td>$<%= x.price %></td>
+			<td>
+				<form action = "/items/<%= x.id %>" method = "post">
+					<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+					<input type="hidden" name="_method" value="delete">
+					<input type = 'submit' value = 'Remove'>
+				</form>
+			</td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
+<br>
+</div>
+<br>
+
+
+
+<div class="boxy">
+<h3>Sales</h3>
+<table>
+	<thead>
+		<tr>
+			<th>Product</th>
+			<th>Date Bought</th>
+			<th>Buyer</th>
+			<th>Amount</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @sales.each do |sales| %>
+		<tr>
+			<td><%= sales.item.product %></td>
+			<td><%= sales.created_at.strftime("%b %d, %Y, %l: %M %p") %></td>
+			<td><%= sales.buyer.first_name %> <%= sales.buyer.last_name %></td>
+			<td>$<%= sales.item.price %></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
+<h3>Total: $<%= @math_sales_3 %></h3>
+</div>
+<br>
+<div class="boxy">
+<h3>Purchases</h3>
+<table>
+	<thead>
+		<tr>
+			<th>Product</th>
+			<th>Date Bought</th>
+			<th>Seller</th>
+			<th>Amount</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @purchases.each do |purchase| %>
+		<tr>
+			<td><%= purchase.item.product %></td>
+			<td><%= purchase.created_at.strftime("%b %d, %Y, %l: %M %p") %></td>
+			<td><%= purchase.item.user.first_name %> <%= purchase.item.user.last_name %></td>
+			<td>$<%= purchase.item.price %></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
+<h3>Total: $<%= @math_purchases_3 %></h3>
+</div>
+

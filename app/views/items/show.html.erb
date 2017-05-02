@@ -1,0 +1,37 @@
+<p>Welcome, <%= @user.first_name %>!</p>
+<a href="/dashboard/<%= @user.id %>">Go to Dashboard</a>
+
+
+<h1>All Products</h1>
+
+<table>
+	<thead>
+		<tr>
+			<th>Product</th>
+			<th>Seller</th>
+			<th>Date Posted</th>
+			<th>Amount</th>
+			<th>Action</th>
+
+		</tr>
+	</thead>
+	<tbody>
+		<% @items.each do |item| %>
+		<tr>
+			<td><%= item.product %></td>
+			<td><%= item.user.first_name %> <%= item.user.last_name %></td>
+			<td><%= item.created_at.strftime("%b %d, %Y, %l: %M %p") %></td>
+			<td>$<%= item.price %></td>
+			<td>
+				<form action = "/purchases" method = "post">
+				<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+				<input type="hidden" name="purchase[user_id]" value = "<%= item.user.id %>">
+				<input type="hidden" name="purchase[buyer_id]" value = "<%= @user.id %>">
+				<input type="hidden" name="purchase[item_id]" value = "<%= item.id %>">
+				<input type = 'submit' value = 'Buy'>
+			</form>
+			</td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
